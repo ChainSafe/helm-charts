@@ -1,0 +1,24 @@
+{{- range $name, $obj := .Values.configMaps }}
+{{- if not $obj.enabled }}{{- continue }}{{- end }}
+---
+apiVersion: {{ $obj.apiVersion | default "v1" }}
+kind: ConfigMap
+metadata:
+  name: {{ $name }}
+  {{- with $obj.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $obj.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  {{- $data := deepCopy ($obj.data | default dict) }}
+  {{- range $key, $f := ($obj.dataFiles | default dict) }}
+    {{- $content := $.Files.Get $f.path }}
+    {{- if $f.tpl }}{{- $content = tpl $content $ | trim }}{{- end }}
+    {{- $_ := set $data $key $content }}
+  {{- end }}
+  {{- toYaml $data | nindent 2 }}
+{{- end }}

@@ -1,0 +1,8 @@
+misconfiguration:
+  helm:
+    values-files:
+      - charts/generic-app/ci/example-values.yaml
+severity:
+  - HIGH
+  - CRITICAL
+exit-code: 1

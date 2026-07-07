@@ -1,0 +1,18 @@
+{{- range $name, $obj := .Values.cronJobs }}
+{{- if not $obj.enabled }}{{- continue }}{{- end }}
+---
+apiVersion: {{ $obj.apiVersion | default "batch/v1" }}
+kind: CronJob
+metadata:
+  name: {{ $name }}
+  {{- with $obj.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $obj.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- toYaml $obj.spec | nindent 2 }}
+{{- end }}

@@ -1,0 +1,35 @@
+# Every object below is OFF by default. In your values file, set `enabled: true`
+# on each object you want rendered
+# (e.g. `deployments: { my-app: { enabled: true, spec: {...} } }`).
+
+# -- Deployment objects, keyed by name. spec is spliced verbatim.
+deployments: {}
+# -- StatefulSet objects, keyed by name.
+statefulSets: {}
+# -- Service objects, keyed by name.
+services: {}
+# -- ServiceAccount objects, keyed by name (metadata only).
+serviceAccounts: {}
+# -- Ingress objects, keyed by name.
+ingresses: {}
+# -- ConfigMap objects, keyed by name. Supports inline data and dataFiles injection.
+configMaps: {}
+# -- ExternalSecret objects, keyed by name. Supports templateFiles injection.
+externalSecrets: {}
+# -- SecretStore objects, keyed by name.
+secretStores: {}
+# -- PersistentVolumeClaim objects, keyed by name.
+persistentVolumeClaims: {}
+# -- CronJob objects, keyed by name.
+cronJobs: {}
+
+# -- Monitoring block appended to config files when appendMonitoringConfig is set.
+monitoring:
+  enabled: true
+  server:
+    port: 9090
+    read_timeout: "5s"
+    write_timeout: "10s"
+    idle_timeout: "30s"
+    shutdown_timeout: "5s"
+  health_check_url: "/health"

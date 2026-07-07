@@ -1,0 +1,27 @@
+suite: services
+templates:
+  - services.yaml
+tests:
+  - it: renders a Service with default apiVersion v1 and verbatim ports
+    set:
+      services:
+        canton-indexer:
+          enabled: true
+          spec:
+            type: ClusterIP
+            ports:
+              - name: http
+                port: 8082
+                targetPort: 8082
+    asserts:
+      - isKind:
+          of: Service
+      - equal:
+          path: apiVersion
+          value: v1
+      - equal:
+          path: metadata.name
+          value: canton-indexer
+      - equal:
+          path: "spec.ports[0].port"
+          value: 8082

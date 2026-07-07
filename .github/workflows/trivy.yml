@@ -1,0 +1,17 @@
+name: Trivy
+
+on: pull_request
+
+jobs:
+  trivy-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy config scan (charts)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: charts/
+          trivy-config: .trivy.yaml
+          severity: HIGH,CRITICAL
+          exit-code: '1'

@@ -1,0 +1,18 @@
+{{- range $name, $obj := .Values.deployments }}
+{{- if not $obj.enabled }}{{- continue }}{{- end }}
+---
+apiVersion: {{ $obj.apiVersion | default "apps/v1" }}
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  {{- with $obj.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $obj.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- toYaml $obj.spec | nindent 2 }}
+{{- end }}
