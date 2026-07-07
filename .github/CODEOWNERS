@@ -1,12 +1,8 @@
-# Ownership routes to the `role_devops` Google group, synced to the
-# @ChainSafe/role_devops GitHub team. CODEOWNERS cannot reference a Google
-# group directly — it must be a GitHub team slug backed by that group.
-
 # Default owner for everything in the repo
-* @ChainSafe/role_devops
+* @ChainSafe/devops
 
 # Workflows are extra-sensitive
-/.github/workflows/ @ChainSafe/role_devops
+/.github/workflows/ @ChainSafe/devops
 
 # Charts
-/charts/ @ChainSafe/role_devops
+/charts/ @ChainSafe/devops
