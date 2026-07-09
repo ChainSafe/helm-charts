@@ -23,6 +23,7 @@ Every object is **OFF by default** — set `enabled: true` on each object you wa
 | cronJobs | object | `{}` | CronJob objects, keyed by name. |
 | deployments | object | `{}` | Deployment objects, keyed by name. spec is spliced verbatim. |
 | externalSecrets | object | `{}` | ExternalSecret objects, keyed by name. Supports templateFiles injection. |
+| extraObjects | list | `[]` | Escape hatch: arbitrary manifests rendered verbatim (with tpl). Each list item is a full object (map) or a templated string. Use for any kind not modeled above — Job, PodDisruptionBudget, NetworkPolicy, Secret, Role, HPA, … |
 | ingresses | object | `{}` | Ingress objects, keyed by name. |
 | monitoring | object | `{"enabled":true,"health_check_url":"/health","server":{"idle_timeout":"30s","port":9090,"read_timeout":"5s","shutdown_timeout":"5s","write_timeout":"10s"}}` | Monitoring block appended to config files when appendMonitoringConfig is set. |
 | persistentVolumeClaims | object | `{}` | PersistentVolumeClaim objects, keyed by name. |

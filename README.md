@@ -1,6 +1,6 @@
 # ChainSafe Helm Charts
 
-Shared Helm charts, published to a GitHub Pages Helm repo. This folder also holds the proposal, the implementation plan, and the open design questions.
+Shared Helm charts, published to a GitHub Pages Helm repo.
 
 ## Usage
 
@@ -25,14 +25,6 @@ helm install my-release chainsafe/generic-app --version <x.y.z>
 - `make pre-commit` — run all hooks
 
 Charts are versioned with semver in each `Chart.yaml`; merging to `main` publishes any new versions automatically.
-
-## Docs
-
-| Doc | What it is |
-|---|---|
-| [proposal.md](proposal.md) | The proposal for the shared `ChainSafe/helm-charts` repo — `generic-app` + future dedicated charts, CI, versioning, publishing. |
-| [canton-chart-design-note.md](canton-chart-design-note.md) | Why a dedicated `canton` chart is deferred, and the A/B/C options to decide before it can be built. |
-| [implementation-plan.md](implementation-plan.md) | The bite-sized, task-by-task build plan for `generic-app`. |
 
 ## Related docs (Notion)
 

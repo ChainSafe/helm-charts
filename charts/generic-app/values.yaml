@@ -1,27 +1,109 @@
-# Every object below is OFF by default. In your values file, set `enabled: true`
-# on each object you want rendered
-# (e.g. `deployments: { my-app: { enabled: true, spec: {...} } }`).
+############################################
+# generic-app
+############################################
+# Every object is OFF by default — set `enabled: true` to render it. Each kind is
+# a map keyed by object name; its `spec`/`data` is spliced verbatim (toYaml), so
+# any field the resource supports works with no chart change. Leave the kinds you
+# don't need empty — the chart stays generic for all projects.
 
 # -- Deployment objects, keyed by name. spec is spliced verbatim.
 deployments: {}
+  # web:
+  #   enabled: true
+  #   spec:
+  #     replicas: 2
+  #     selector: { matchLabels: { app: web } }
+  #     template:
+  #       metadata: { labels: { app: web } }
+  #       spec:
+  #         containers:
+  #           - name: web
+  #             image: ghcr.io/chainsafe/web:1.2.3
+  #             ports: [{ name: http, containerPort: 8080 }]
+  #             resources:
+  #               requests: { cpu: 100m, memory: 128Mi }
+  #               limits: { cpu: 500m, memory: 512Mi }
+  #             securityContext:
+  #               allowPrivilegeEscalation: false
+  #               readOnlyRootFilesystem: true
+  #               capabilities: { drop: [ALL] }
+
 # -- StatefulSet objects, keyed by name.
 statefulSets: {}
+  # db:
+  #   enabled: true
+  #   spec:
+  #     serviceName: db
+  #     volumeClaimTemplates:
+  #       - metadata: { name: data }
+  #         spec: { accessModes: [ReadWriteOnce], resources: { requests: { storage: 10Gi } } }
+
 # -- Service objects, keyed by name.
 services: {}
+  # web:
+  #   enabled: true
+  #   spec:
+  #     selector: { app: web }
+  #     ports: [{ name: http, port: 80, targetPort: 8080 }]
+
 # -- ServiceAccount objects, keyed by name (metadata only).
 serviceAccounts: {}
+  # web:
+  #   enabled: true
+  #   annotations: { eks.amazonaws.com/role-arn: arn:aws:iam::123:role/web }
+
 # -- Ingress objects, keyed by name.
 ingresses: {}
+  # web:
+  #   enabled: true
+  #   annotations: { kubernetes.io/ingress.class: alb }
+  #   spec:
+  #     rules: [{ host: web.example.com, http: { paths: [...] } }]
+
 # -- ConfigMap objects, keyed by name. Supports inline data and dataFiles injection.
 configMaps: {}
+  # app-config:
+  #   enabled: true
+  #   data: { APP_ENV: production }
+  #   dataFiles:
+  #     config.yaml: { path: files/app-config.yaml, tpl: false }
+
 # -- ExternalSecret objects, keyed by name. Supports templateFiles injection.
 externalSecrets: {}
+  # app-secrets:
+  #   enabled: true
+  #   templateFiles:
+  #     config.yaml: { path: files/app-config.yaml, tpl: true, appendMonitoringConfig: true }
+  #   spec:
+  #     secretStoreRef: { name: my-store, kind: SecretStore }
+  #     target: { name: app-secrets }
+
 # -- SecretStore objects, keyed by name.
 secretStores: {}
+  # my-store:
+  #   enabled: true
+  #   spec: { provider: { aws: { service: SecretsManager, region: eu-north-1 } } }
+
 # -- PersistentVolumeClaim objects, keyed by name.
 persistentVolumeClaims: {}
+  # data:
+  #   enabled: true
+  #   spec: { accessModes: [ReadWriteOnce], resources: { requests: { storage: 20Gi } } }
+
 # -- CronJob objects, keyed by name.
 cronJobs: {}
+  # nightly:
+  #   enabled: true
+  #   spec: { schedule: "0 2 * * *", jobTemplate: { spec: { template: { spec: {...} } } } }
+
+# -- Escape hatch: arbitrary manifests rendered verbatim (with tpl). Each list
+# item is a full object (map) or a templated string. Use for any kind not
+# modeled above — Job, PodDisruptionBudget, NetworkPolicy, Secret, Role, HPA, …
+extraObjects: []
+  # - apiVersion: policy/v1
+  #   kind: PodDisruptionBudget
+  #   metadata: { name: web-pdb }
+  #   spec: { minAvailable: 1, selector: { matchLabels: { app: web } } }
 
 # -- Monitoring block appended to config files when appendMonitoringConfig is set.
 monitoring:

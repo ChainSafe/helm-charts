@@ -1,7 +1,7 @@
-misconfiguration:
-  helm:
-    values-files:
-      - charts/generic-app/ci/example-values.yaml
+# Helm value files are passed via TRIVY_HELM_VALUES in the workflow.
+# Trivy's config file does NOT apply helm value-files (verified) — only the
+# --helm-values flag / TRIVY_HELM_VALUES env render the chart's objects, so the
+# scan here would otherwise be vacuous (empty render → nothing scanned).
 severity:
   - HIGH
   - CRITICAL

@@ -12,8 +12,9 @@ kubeconform: ## render + validate manifests
 docs: ## regenerate chart READMEs
 	@docker run --rm -v $(shell pwd):/helm-docs jnorwood/helm-docs:v1.14.2 --chart-search-root=charts --template-files=../helm-docs/_templates.gotmpl --template-files=README.md.gotmpl
 
-install-pre-commit: ## install pre-commit hooks
+install-pre-commit: ## install pre-commit hooks (incl. commit-msg for commitizen)
 	@pre-commit install
+	@pre-commit install --hook-type commit-msg
 	@pre-commit install-hooks
 
 pre-commit: ## run all pre-commit hooks
