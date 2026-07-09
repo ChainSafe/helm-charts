@@ -9,6 +9,9 @@ jobs:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
       - uses: azure/setup-helm@v4
+      # Install the unittest plugin so the pre-commit hook uses it instead of
+      # the Docker image (which runs as non-root and can't write __snapshot__).
+      - run: helm plugin install https://github.com/helm-unittest/helm-unittest
       - run: pip install pre-commit
       - run: make install-pre-commit
       - run: make pre-commit
@@ -33,9 +36,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: helm-unittest/helm-unittest-action@v1
-        with:
-          charts: charts/generic-app
+      - uses: azure/setup-helm@v4
+      - run: helm plugin install https://github.com/helm-unittest/helm-unittest
+      - run: helm unittest charts/generic-app
 
   kubeconform:
     runs-on: ubuntu-latest
