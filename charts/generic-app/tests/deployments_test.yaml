@@ -5,21 +5,21 @@ tests:
   - it: renders a Deployment with verbatim spec, name, labels, and default apiVersion
     set:
       deployments:
-        canton-indexer:
+        demo-app:
           enabled: true
-          labels: { app: canton-indexer }
+          labels: { app: demo-app }
           spec:
             replicas: 1
             selector:
-              matchLabels: { app: canton-indexer }
+              matchLabels: { app: demo-app }
     asserts:
       - hasDocuments: { count: 1 }
       - isKind: { of: Deployment }
       - equal: { path: apiVersion, value: apps/v1 }
-      - equal: { path: metadata.name, value: canton-indexer }
-      - equal: { path: metadata.labels.app, value: canton-indexer }
+      - equal: { path: metadata.name, value: demo-app }
+      - equal: { path: metadata.labels.app, value: demo-app }
       - equal: { path: spec.replicas, value: 1 }
-      - equal: { path: spec.selector.matchLabels.app, value: canton-indexer }
+      - equal: { path: spec.selector.matchLabels.app, value: demo-app }
   - it: renders no documents when the map is empty
     set:
       deployments: {}
@@ -28,7 +28,7 @@ tests:
   - it: renders nothing for an entry that omits enabled (off by default)
     set:
       deployments:
-        canton-indexer:
+        demo-app:
           spec:
             replicas: 1
     asserts:
