@@ -2,6 +2,13 @@ name: Helm Checks
 
 on: pull_request
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
@@ -9,12 +16,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with: { fetch-depth: 0 }
       - uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
-      # Install the unittest plugin so the pre-commit hook uses it instead of
-      # the Docker image (which runs as non-root and can't write __snapshot__).
-      - run: helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
       - run: pip install pre-commit
       - run: make install-pre-commit
-      - run: make pre-commit
+      # helm-unittest runs in its own job below — skip it here to avoid double-running.
+      - run: SKIP=helm-unittest make pre-commit
 
   chart-testing:
     runs-on: ubuntu-latest
@@ -37,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
-      - run: helm plugin install https://github.com/helm-unittest/helm-unittest --verify=false
+      - run: helm plugin install https://github.com/helm-unittest/helm-unittest --version v0.6.2 --verify=false
       - run: helm unittest charts/generic-app
 
   kubeconform:
@@ -47,6 +52,7 @@ jobs:
       - uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
       - run: |
           curl -sSL -o /tmp/kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          echo "95f14e87aa28c09d5941f11bd024c1d02fdc0303ccaa23f61cef67bc92619d73  /tmp/kubeconform.tar.gz" | sha256sum -c -
           tar -xzf /tmp/kubeconform.tar.gz -C /usr/local/bin kubeconform
       - run: scripts/kubeconform-check.sh
 
@@ -54,9 +60,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
         with: { python-version: '3.12' }
       - run: pip install commitizen
-      # Enforce Conventional Commits on every commit in the PR range.
-      - run: cz check --rev-range origin/${{ github.base_ref }}..HEAD
+      # Check only the PR's own commits (base..head). Without pinning ref to
+      # head.sha, actions/checkout leaves the auto-merge commit at HEAD, whose
+      # "Merge … into …" message would fail the Conventional-Commit check.
+      - run: cz check --rev-range ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
