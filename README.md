@@ -4,10 +4,34 @@ Shared Helm charts, published to a GitHub Pages Helm repo.
 
 ## Usage
 
+Add the repo and install a chart, pinning a version and supplying your values:
+
 ```bash
 helm repo add chainsafe https://chainsafe.github.io/helm-charts
 helm repo update
-helm install my-release chainsafe/generic-app --version <x.y.z>
+helm install my-release chainsafe/generic-app --version <x.y.z> -f my-values.yaml
+```
+
+`generic-app` renders **nothing** by default — describe each object in your
+values file and set `enabled: true` on it. Full reference (a documented example
+per kind) lives in [charts/generic-app](charts/generic-app):
+
+```yaml
+deployments:
+  web:
+    enabled: true
+    spec:
+      replicas: 2
+      selector: { matchLabels: { app: web } }
+      template:
+        metadata: { labels: { app: web } }
+        spec:
+          containers:
+            - name: web
+              image: nginx:1.27
+              resources:
+                requests: { cpu: 50m, memory: 64Mi }
+                limits: { cpu: 250m, memory: 128Mi }
 ```
 
 ## Charts
@@ -15,6 +39,36 @@ helm install my-release chainsafe/generic-app --version <x.y.z>
 | Chart | Description |
 |---|---|
 | [generic-app](charts/generic-app) | Values-driven generic chart: one template per Kubernetes kind, specs spliced verbatim. Every object is OFF until `enabled: true`. |
+
+Add a new chart later by dropping a folder under `charts/` with its own
+`Chart.yaml`, `values.yaml`, `templates/`, and `tests/` — CI and publishing pick
+it up automatically.
+
+## Repository layout
+
+```
+helm-charts/
+├── charts/                     # one folder per chart (each versioned independently)
+│   └── generic-app/
+│       ├── Chart.yaml          # name + version
+│       ├── values.yaml         # documented; every object OFF by default
+│       ├── templates/          # one template per Kubernetes kind
+│       ├── tests/              # helm-unittest suites
+│       ├── ci/                 # example values used by lint / kubeconform / Trivy
+│       └── files/              # files injectable via dataFiles / templateFiles
+├── scripts/                    # CI helpers (kubeconform check, unittest hook)
+├── .github/
+│   ├── workflows/              # helm-checks, trivy, chart-releaser
+│   └── CODEOWNERS
+├── ct.yaml                     # chart-testing config
+├── lintconf.yaml               # yamllint rules for ct
+├── .trivy.yaml                 # Trivy config
+├── .pre-commit-config.yaml     # pre-commit hooks
+├── cz.toml                     # commitizen (Conventional Commits)
+├── Makefile                    # local dev targets
+├── CONTRIBUTING.md             # tooling guide + flow diagram
+└── README.md
+```
 
 ## Development
 
@@ -26,11 +80,14 @@ helm install my-release chainsafe/generic-app --version <x.y.z>
 
 Charts are versioned with semver in each `Chart.yaml`; merging to `main` publishes any new versions automatically.
 
-## Related docs (Notion)
+See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full tooling guide (helm-unittest, `ct`, kubeconform, Trivy, commitizen, publishing) and a flow diagram.
 
-- [A Shared Helm Charts Repo (Generic + Canton)](https://app.notion.com/p/chainsafe/A-Shared-Helm-Charts-Repo-Generic-Canton-38f2103664e88087a0f5ca01ad646b1b)
-- [Generic Chart Migration — Proposal Doc](https://app.notion.com/p/chainsafe/Generic-Chart-Migration-Proposal-Doc-37c2103664e88074ba81f692c5aa323d)
-- [ArgoCD Setup — Simple and Generic](https://app.notion.com/p/chainsafe/ArgoCD-Setup-Simple-and-Generic-38f2103664e880dba886fba7c9f507c0)
+## Contributing
+
+Changes go through a reviewed PR (protected `main`, `@ChainSafe/devops` via
+CODEOWNERS). Every PR runs lint, unit tests, manifest validation, a security
+scan, and a Conventional-Commit check — run `make pre-commit` locally first.
+Details in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Where this fits
 
