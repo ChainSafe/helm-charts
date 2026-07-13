@@ -44,7 +44,7 @@ flowchart TD
     H --> I["Trivy re-scan"]
     H --> J["chart-releaser<br/>package + publish new versions"]
     J --> K[("GitHub Pages<br/>Helm repo")]
-    K -.-> L["ArgoCD pulls the pinned chart<br/>(Stage B)"]
+    K -.-> L["ArgoCD pulls the pinned chart<br/>"]
 ```
 
 ---
