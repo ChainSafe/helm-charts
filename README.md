@@ -66,7 +66,8 @@ helm-charts/
 ├── .pre-commit-config.yaml     # pre-commit hooks
 ├── cz.toml                     # commitizen (Conventional Commits)
 ├── Makefile                    # local dev targets
-├── CONTRIBUTING.md             # tooling guide + flow diagram
+├── CONTRIBUTING.md             # how to contribute
+├── docs/                       # tooling, publishing, chart-authoring guides
 └── README.md
 ```
 
@@ -80,14 +81,21 @@ helm-charts/
 
 Charts are versioned with semver in each `Chart.yaml`; merging to `main` publishes any new versions automatically.
 
-See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full tooling guide (helm-unittest, `ct`, kubeconform, Trivy, commitizen, publishing) and a flow diagram.
+See **[docs/tooling.md](docs/tooling.md)** for the full toolchain (helm-unittest, `ct`, kubeconform, Trivy, commitizen), the test cases, and a flow diagram.
 
 ## Contributing
 
 Changes go through a reviewed PR (protected `main`, `@ChainSafe/devops` via
 CODEOWNERS). Every PR runs lint, unit tests, manifest validation, a security
 scan, and a Conventional-Commit check — run `make pre-commit` locally first.
-Details in [CONTRIBUTING.md](CONTRIBUTING.md).
+Workflow: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Docs
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to contribute (the workflow)
+- [docs/tooling.md](docs/tooling.md) — toolchain, test cases, flow diagram, local setup
+- [docs/chart-authoring.md](docs/chart-authoring.md) — how to add a new dedicated chart
+- [docs/chart-publishing.md](docs/chart-publishing.md) — versioning and how charts get published
 
 ## Where this fits
 

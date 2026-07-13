@@ -3,4 +3,5 @@
 charts/**/charts/
 charts/**/*.tgz
 .DS_Store
-/docs
+# Internal planning docs only — contributor docs under docs/ are tracked.
+/docs/superpowers/
