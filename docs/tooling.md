@@ -62,15 +62,14 @@ values and asserts the **exact rendered output** — so a future edit can't
 silently change what the chart produces. This is what lets us refactor with
 confidence.
 
-Our current suites (13 tests):
+Our current suites (12 tests):
 
 | Suite (file) | What it proves |
 |---|---|
 | `deployments_test.yaml` | spec/labels/name spliced verbatim; default `apiVersion`; **empty map → 0 objects**; **no `enabled` → 0 objects** (off-by-default); `apiVersion` override honored |
 | `services_test.yaml` | Service renders with default `apiVersion: v1` and verbatim ports |
 | `configmaps_test.yaml` | inline `data` spliced; `dataFiles` injects a chart file into a data key |
-| `externalsecrets_test.yaml` | `spec` spliced with default apiVersion; `templateFiles` injects a file into `target.template.data` and appends the monitoring block |
-| `helpers_test.yaml` | the `monitoringConfig` helper renders into an injected file |
+| `externalsecrets_test.yaml` | `spec` spliced with default apiVersion; `templateFiles` injects a file into `target.template.data` and the `monitoringConfig` helper appends the monitoring block |
 | `extraobjects_test.yaml` | `extraObjects` renders a structured (map) entry and a templated string; empty list → 0 objects |
 
 Run: `make unittest`.

@@ -54,11 +54,23 @@ Publishing to GitHub Pages requires:
 - **The repo is public.** GitHub Pages publishing doesn't work from a private
   repo (or would expose a public site with private, auth-gated packages). While
   the repo is private, PR CI still runs — only publishing waits.
-- **Pages enabled** — Settings → Pages → deploy from the `gh-pages` branch
-  (chart-releaser creates it on its first run to `main`).
-- **Workflow permissions** — Settings → Actions → General → Workflow permissions
-  → **Read and write** (so chart-releaser can push `gh-pages` and create
-  releases).
+- **A `gh-pages` branch must already exist.** `chart-releaser-action` does *not*
+  create it — `cr index` checks out `origin/gh-pages` to commit `index.yaml`, so
+  the first `main` push fails (half-published: release exists, index doesn't) if
+  the branch is missing. Create it once, up front:
+
+  ```bash
+  git switch --orphan gh-pages
+  git commit --allow-empty -m "chore: init gh-pages"
+  git push origin gh-pages
+  git switch main
+  ```
+
+- **Pages enabled** — Settings → Pages → deploy from the `gh-pages` branch.
+
+The release job declares `permissions: contents: write` itself, so the
+repo-level **Workflow permissions** setting can stay at the default **Read**
+— only this job gets write access.
 
 ## Cutting a release — checklist
 
