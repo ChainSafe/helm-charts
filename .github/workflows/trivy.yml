@@ -1,0 +1,32 @@
+name: Trivy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Trivy scan (charts — misconfig + secrets)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        env:
+          # Render the chart with the example values — without this Trivy scans
+          # the empty default render (0 objects) and passes vacuously.
+          TRIVY_HELM_VALUES: charts/app-chart/ci/example-values.yaml
+        with:
+          scan-type: fs
+          scan-ref: charts/
+          scanners: misconfig,secret
+          trivy-config: .trivy.yaml
+          severity: HIGH,CRITICAL
+          exit-code: '1'

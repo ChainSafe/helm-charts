@@ -1,0 +1,15 @@
+{{- template "chart.header" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "extra.installation" . }}
+
+## How it works
+
+`app-chart` has one template per Kubernetes kind. Each kind is a map in values keyed by object name; the object's `spec` (or `data`) is spliced verbatim with `toYaml`. There is no service-specific logic in the chart — describe a service entirely in a values file.
+
+Every object is **OFF by default** — set `enabled: true` on each object you want rendered. See `ci/example-values.yaml` for a worked example.
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

@@ -1,0 +1,44 @@
+suite: deployments
+templates:
+  - deployments.yaml
+tests:
+  - it: renders a Deployment with verbatim spec, name, labels, and default apiVersion
+    set:
+      deployments:
+        demo-app:
+          enabled: true
+          labels: { app: demo-app }
+          spec:
+            replicas: 1
+            selector:
+              matchLabels: { app: demo-app }
+    asserts:
+      - hasDocuments: { count: 1 }
+      - isKind: { of: Deployment }
+      - equal: { path: apiVersion, value: apps/v1 }
+      - equal: { path: metadata.name, value: demo-app }
+      - equal: { path: metadata.labels.app, value: demo-app }
+      - equal: { path: spec.replicas, value: 1 }
+      - equal: { path: spec.selector.matchLabels.app, value: demo-app }
+  - it: renders no documents when the map is empty
+    set:
+      deployments: {}
+    asserts:
+      - hasDocuments: { count: 0 }
+  - it: renders nothing for an entry that omits enabled (off by default)
+    set:
+      deployments:
+        demo-app:
+          spec:
+            replicas: 1
+    asserts:
+      - hasDocuments: { count: 0 }
+  - it: honours an apiVersion override
+    set:
+      deployments:
+        foo:
+          enabled: true
+          apiVersion: apps/v1beta1
+          spec: { replicas: 2 }
+    asserts:
+      - equal: { path: apiVersion, value: apps/v1beta1 }

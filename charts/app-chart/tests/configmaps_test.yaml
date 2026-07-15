@@ -1,0 +1,28 @@
+suite: configMaps
+templates:
+  - configmaps.yaml
+tests:
+  - it: splices inline data verbatim
+    set:
+      configMaps:
+        app-config:
+          enabled: true
+          data:
+            KEY: value
+    asserts:
+      - isKind: { of: ConfigMap }
+      - equal: { path: metadata.name, value: app-config }
+      - equal: { path: data.KEY, value: value }
+  - it: injects a chart file as a data key via dataFiles
+    set:
+      configMaps:
+        file-config:
+          enabled: true
+          dataFiles:
+            config.yaml:
+              path: files/example-config.yaml
+              tpl: false
+    asserts:
+      - matchRegex:
+          path: data["config.yaml"]
+          pattern: "name: example"

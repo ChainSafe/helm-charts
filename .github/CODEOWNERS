@@ -1,0 +1,8 @@
+# Default owner for everything in the repo
+* @ChainSafe/devops
+
+# Workflows are extra-sensitive
+/.github/workflows/ @ChainSafe/devops
+
+# Charts
+/charts/ @ChainSafe/devops

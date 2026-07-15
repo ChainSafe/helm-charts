@@ -1,0 +1,7 @@
+.cr-release-packages/
+.cr-index/
+charts/**/charts/
+charts/**/*.tgz
+.DS_Store
+# Internal planning docs only — contributor docs under docs/ are tracked.
+/docs/superpowers/

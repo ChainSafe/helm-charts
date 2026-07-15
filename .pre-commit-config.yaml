@@ -1,0 +1,39 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+      - id: fix-byte-order-marker
+      - id: check-merge-conflict
+      - id: check-added-large-files
+
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.23
+    hooks:
+      - id: helmlint
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.29.1
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+  - repo: https://github.com/norwoodj/helm-docs
+    rev: v1.14.2
+    hooks:
+      - id: helm-docs-container
+        args:
+          - --chart-search-root=charts
+          - --template-files=../helm-docs/_templates.gotmpl
+          - --template-files=README.md.gotmpl
+
+  - repo: local
+    hooks:
+      - id: helm-unittest
+        name: Helm Unittest
+        entry: scripts/hook-helm-unittest.sh
+        language: system
+        files: "^charts/.*"
+        pass_filenames: false

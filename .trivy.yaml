@@ -1,0 +1,3 @@
+# Helm value files are passed via TRIVY_HELM_VALUES in the workflow — Trivy's
+# config file does NOT apply helm value-files (verified); only the flag/env
+# render the chart's objects. Severity and exit-code are set as workflow inputs.
