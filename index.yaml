@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  app-chart:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2026-07-15T10:44:28.245027103Z"
+    description: Values-driven generic chart — one template per Kubernetes kind, specs
+      spliced verbatim from values
+    digest: 4452eaafcc2da7a0dcf6807d6d92f1f772b5a3dba4275e4efa848599e840b349
+    maintainers:
+    - name: ChainSafe DevOps
+    name: app-chart
+    type: application
+    urls:
+    - https://github.com/ChainSafe/helm-charts/releases/download/app-chart-0.1.0/app-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-07-15T10:44:28.245040258Z"
