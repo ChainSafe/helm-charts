@@ -51,13 +51,13 @@ flowchart TD
 ## The tools, in detail
 
 ### Helm
-The package manager. Our chart is `charts/generic-app` — one template per
+The package manager. Our chart is `charts/app-chart` — one template per
 Kubernetes kind, and each object's `spec`/`data` is spliced **verbatim** from a
 values file. Every object is **off by default**; you turn it on with
 `enabled: true`.
 
 ### helm-unittest — the real safety net
-Runs the suites in `charts/generic-app/tests/`. Each test feeds the chart some
+Runs the suites in `charts/app-chart/tests/`. Each test feeds the chart some
 values and asserts the **exact rendered output** — so a future edit can't
 silently change what the chart produces. This is what lets us refactor with
 confidence.

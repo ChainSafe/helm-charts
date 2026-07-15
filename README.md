@@ -9,12 +9,12 @@ Add the repo and install a chart, pinning a version and supplying your values:
 ```bash
 helm repo add chainsafe https://chainsafe.github.io/helm-charts
 helm repo update
-helm install my-release chainsafe/generic-app --version <x.y.z> -f my-values.yaml
+helm install my-release chainsafe/app-chart --version <x.y.z> -f my-values.yaml
 ```
 
-`generic-app` renders **nothing** by default — describe each object in your
+`app-chart` renders **nothing** by default — describe each object in your
 values file and set `enabled: true` on it. Full reference (a documented example
-per kind) lives in [charts/generic-app](charts/generic-app):
+per kind) lives in [charts/app-chart](charts/app-chart):
 
 ```yaml
 deployments:
@@ -38,7 +38,7 @@ deployments:
 
 | Chart | Description |
 |---|---|
-| [generic-app](charts/generic-app) | Values-driven generic chart: one template per Kubernetes kind, specs spliced verbatim. Every object is OFF until `enabled: true`. |
+| [app-chart](charts/app-chart) | Values-driven generic chart: one template per Kubernetes kind, specs spliced verbatim. Every object is OFF until `enabled: true`. |
 
 Add a new chart later by dropping a folder under `charts/` with its own
 `Chart.yaml`, `values.yaml`, `templates/`, and `tests/` — CI and publishing pick
@@ -49,7 +49,7 @@ it up automatically.
 ```
 helm-charts/
 ├── charts/                     # one folder per chart (each versioned independently)
-│   └── generic-app/
+│   └── app-chart/
 │       ├── Chart.yaml          # name + version
 │       ├── values.yaml         # documented; every object OFF by default
 │       ├── templates/          # one template per Kubernetes kind
@@ -104,8 +104,8 @@ This is **Stage A** of the wider GitOps overhaul: build and publish the charts f
 ```
 helm-charts repo (this)            infra-kubernetes repo (Stage B)
 ────────────────────               ──────────────────────────────
-charts/generic-app  ──┐  published  clusters/<cluster>/apps/...
-                      ├──(versioned)─► pins generic-app @ x.y.z
+charts/app-chart  ──┐  published  clusters/<cluster>/apps/...
+                      ├──(versioned)─► pins app-chart @ x.y.z
                       │                + supplies per-service values
                       └──────────────► existing ArgoCD syncs it
 ```

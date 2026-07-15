@@ -1,4 +1,4 @@
-# generic-app
+# app-chart
 
 Values-driven generic chart — one template per Kubernetes kind, specs spliced verbatim from values
 
@@ -6,12 +6,12 @@ Values-driven generic chart — one template per Kubernetes kind, specs spliced 
 
 ```bash
 helm repo add chainsafe https://chainsafe.github.io/helm-charts
-helm install generic-app chainsafe/generic-app
+helm install app-chart chainsafe/app-chart
 ```
 
 ## How it works
 
-`generic-app` has one template per Kubernetes kind. Each kind is a map in values keyed by object name; the object's `spec` (or `data`) is spliced verbatim with `toYaml`. There is no service-specific logic in the chart — describe a service entirely in a values file.
+`app-chart` has one template per Kubernetes kind. Each kind is a map in values keyed by object name; the object's `spec` (or `data`) is spliced verbatim with `toYaml`. There is no service-specific logic in the chart — describe a service entirely in a values file.
 
 Every object is **OFF by default** — set `enabled: true` on each object you want rendered. See `ci/example-values.yaml` for a worked example.
 

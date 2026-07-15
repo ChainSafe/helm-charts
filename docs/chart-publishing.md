@@ -41,7 +41,7 @@ Nothing is packaged or pushed by hand — **merging to `main` is the release.**
 ```bash
 helm repo add chainsafe https://chainsafe.github.io/helm-charts
 helm repo update
-helm install my-release chainsafe/generic-app --version <x.y.z> -f my-values.yaml
+helm install my-release chainsafe/app-chart --version <x.y.z> -f my-values.yaml
 ```
 
 ArgoCD (Stage B) consumes the same published chart by pinning a version and

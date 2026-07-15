@@ -22,7 +22,7 @@ jobs:
         env:
           # Render the chart with the example values — without this Trivy scans
           # the empty default render (0 objects) and passes vacuously.
-          TRIVY_HELM_VALUES: charts/generic-app/ci/example-values.yaml
+          TRIVY_HELM_VALUES: charts/app-chart/ci/example-values.yaml
         with:
           scan-type: fs
           scan-ref: charts/

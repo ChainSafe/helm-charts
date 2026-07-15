@@ -1,5 +1,5 @@
 ############################################
-# generic-app
+# app-chart
 ############################################
 # Every object is OFF by default — set `enabled: true` to render it. Each kind is
 # a map keyed by object name; its `spec`/`data` is spliced verbatim (toYaml), so

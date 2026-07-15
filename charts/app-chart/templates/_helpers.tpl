@@ -1,4 +1,4 @@
-{{- define "generic-app.monitoringConfig" -}}
+{{- define "app-chart.monitoringConfig" -}}
 monitoring:
   enabled: {{ .Values.monitoring.enabled }}
   server:

@@ -4,14 +4,14 @@
 
 - **If the service fits the generic shape** (deployment/statefulset, service,
   ingress, config, secrets — anything expressible as Kubernetes objects), use
-  **`generic-app`** with a values file. Don't add a chart.
+  **`app-chart`** with a values file. Don't add a chart.
 - **Only add a dedicated chart** when a service has real chart *logic* the
   generic chart can't express — a CRD, an operator, complex conditional wiring.
-  A new chart that just re-implements `generic-app` is a maintenance trap.
+  A new chart that just re-implements `app-chart` is a maintenance trap.
 
 ## Skeleton
 
-Create one folder under `charts/`, same shape as `generic-app`:
+Create one folder under `charts/`, same shape as `app-chart`:
 
 ```
 charts/<name>/
@@ -39,7 +39,7 @@ charts/<name>/
 5. **`ci/example-values.yaml`** — a realistic values file. `ct lint`,
    `kubeconform`, and Trivy all render the chart with it, so make it clean
    (resources set, hardened `securityContext`, no HIGH/CRITICAL Trivy findings).
-6. **`README.md.gotmpl` + `.helmignore`** — copy `generic-app`'s, then run
+6. **`README.md.gotmpl` + `.helmignore`** — copy `app-chart`'s, then run
    `make docs` to generate `README.md`. Never hand-edit the generated README.
 7. **(Optional) CODEOWNERS** — add a `/charts/<name>/ @team` line if a specific
    team owns it.
