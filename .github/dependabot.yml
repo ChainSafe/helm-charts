@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Keep the SHA-pinned GitHub Actions in .github/workflows/ current.
+  # This is the only dependency ecosystem in the repo (no npm/go/pip deps).
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      # One grouped PR per week instead of one per action.
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      # Conventional Commit prefix so the commit-message check passes.
+      prefix: chore
+    labels:
+      - dependencies

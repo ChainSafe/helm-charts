@@ -1,0 +1,28 @@
+# EditorConfig — cross-editor consistency. https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Go template helpers ship with the YAML manifests they render.
+[*.{yaml,yml,tpl,gotmpl}]
+indent_style = space
+indent_size = 2
+
+# Makefiles require real tabs.
+[Makefile]
+indent_style = tab
+
+# Markdown uses trailing whitespace for hard line breaks.
+[*.md]
+trim_trailing_whitespace = false
+
+# Shell scripts.
+[*.sh]
+indent_style = space
+indent_size = 2

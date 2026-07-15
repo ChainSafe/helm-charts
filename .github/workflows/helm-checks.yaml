@@ -16,6 +16,15 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with: { fetch-depth: 0 }
       - uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
+      # Cache pip downloads and pre-commit's per-hook environments — rebuilding
+      # them from scratch is the slowest part of this job.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: pre-commit-${{ runner.os }}-
       - run: pip install pre-commit
       - run: make install-pre-commit
       # helm-unittest runs in its own job below — skip it here to avoid double-running.
@@ -43,7 +52,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
       - run: helm plugin install https://github.com/helm-unittest/helm-unittest --version v0.6.2 --verify=false
-      - run: helm unittest charts/generic-app
+      - run: helm unittest charts/app-chart
 
   kubeconform:
     runs-on: ubuntu-latest
